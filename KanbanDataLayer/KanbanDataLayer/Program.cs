@@ -79,12 +79,43 @@ namespace KanbanDataLayer
                     }
                 }
 
-//                Console.WriteLine("---");
-//                Console.WriteLine("Please enter the card name to delete: ");
-//                var addcardinput = Console.ReadLine();
-//                var addcardrow = db.Set<Card>();
-//
-//                addcardrow = new Card
+
+
+                //prompts user to add another list/data
+                Console.WriteLine("----");
+                Console.WriteLine("Please enter card name to add: ");
+                var addcardInput = Console.ReadLine();
+                int listIdinput = int.Parse(Console.ReadLine());
+
+                //Creating a new instance of list class
+                //property of class list "name" is assigned the value "addlistInput"
+                var newcardname = new Card { Text = addcardInput };
+                //Adding the new instance of list class to our list tables
+                db.Cards.Add(newcardname);
+                //save changes
+                db.SaveChanges();
+                //reprinting our list of lists with new changes
+                foreach (var list in db.Lists)
+                {
+                    Console.WriteLine(list.Name);
+                    //...looping each card for that list
+                    foreach (var cards in db.Cards)
+                    {
+                        //aligning the listID as primary and foreign keys. Assigning each card to its list.
+                        if (list.ListId == cards.ListId)
+                        {
+                            Console.WriteLine("\t" + cards.Text);
+                        }
+                    }
+                }
+
+
+                Console.WriteLine("---");
+                Console.WriteLine("Please enter the card name to add: ");
+                Console.WriteLine("Please enter the list Id: ");
+                var addcardrow = db.Set<Card>();
+
+                addcardrow.Add(new Card { ListId = listIdinput, CreatedDate = DateTime.Now, Text = addcardInput });
 
             }
         Console.ReadLine();
